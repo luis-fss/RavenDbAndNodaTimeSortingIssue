@@ -54,7 +54,7 @@ public class RavenDbAndNodaTimeSortingIssue : RavenTestDriver
 
         WaitForUserToContinueTheTest(documentStore);
 
-        Assert.Equal(instantFormat1, pattern.Format(ravenOrderedList[0].CreatedOn));
+        Assert.Equal(instantFormat1, pattern.Format(ravenOrderedList[0].CreatedOn)); // fails here!!!
         Assert.Equal(instantFormat2, pattern.Format(ravenOrderedList[1].CreatedOn));
         Assert.Equal(instantFormat3, pattern.Format(ravenOrderedList[2].CreatedOn));
     }
