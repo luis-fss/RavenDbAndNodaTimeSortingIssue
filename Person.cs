@@ -2,19 +2,8 @@
 
 namespace RavenDbAndNodaTimeSortingIssue;
 
-public class Person
+public class Person(string id, Instant createdOn)
 {
-    public Person()
-    {
-
-    }
-
-    public Person(string id, Instant createdOn)
-    {
-        Id = id;
-        CreatedOn = createdOn;
-    }
-
-    public string Id { get; set; }
-    public Instant CreatedOn { get; set; }
+    public string Id { get; set; } = id;
+    public Instant CreatedOn { get; set; } = createdOn;
 }
