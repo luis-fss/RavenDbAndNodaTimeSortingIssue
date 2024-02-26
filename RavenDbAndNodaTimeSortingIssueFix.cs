@@ -71,13 +71,12 @@ public class RavenDbAndNodaTimeSortingIssueFix : RavenTestDriver
 
     private class InstantConverter : JsonConverter<Instant>
     {
-
         public override Instant ReadJson(JsonReader reader, Type type, Instant existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             // DateTime value = serializer.Deserialize<DateTime>(reader);
             // return Instant.FromDateTimeUtc(value);
             var timestamp = serializer.Deserialize<string>(reader);
-            return Pattern.Parse(timestamp).Value;
+            return InstantPattern.ExtendedIso.Parse(timestamp).Value;
         }
 
         public override void WriteJson(JsonWriter writer, Instant instant, JsonSerializer serializer)
