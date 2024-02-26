@@ -67,9 +67,10 @@ public class RavenDbAndNodaTimeSortingIssueFix : RavenTestDriver
         ModifyDocumentStore(documentStore);
     }
 
+    private static readonly InstantPattern Pattern = InstantPattern.CreateWithInvariantCulture("yyyy-MM-ddTHH:mm:ss.fffffff'Z'");
+
     private class InstantConverter : JsonConverter<Instant>
     {
-        private static readonly InstantPattern Pattern = InstantPattern.CreateWithInvariantCulture("yyyy-MM-ddTHH:mm:ss.fffffff'Z'");
 
         public override Instant ReadJson(JsonReader reader, Type type, Instant existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
@@ -88,29 +89,10 @@ public class RavenDbAndNodaTimeSortingIssueFix : RavenTestDriver
         }
     }
 
-    private static class JsonExtensions
-    {
-        public static string ToJson(object value)
-        {
-            return JsonConvert.SerializeObject(value, new JsonSerializerSettings
-            {
-                Converters = new List<JsonConverter>
-                {
-                    new InstantConverter()
-                },
-
-                DateParseHandling = DateParseHandling.None,
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc
-            });
-        }
-    }
-
     private static bool InstantQueryValueConverter(string name, Instant instant, bool range, out string outputValue)
     {
-        outputValue = JsonExtensions.ToJson(instant.ToDateTimeUtc());
-        // InstantPattern pattern = InstantPattern.CreateWithInvariantCulture("yyyy-MM-ddTHH:mm:ss.fffffff'Z'");
-        // string timestamp = pattern.Format(instant);
-        // outputValue = timestamp;
+        var timestamp = Pattern.Format(instant);
+        outputValue = timestamp;
         return true;
     }
 
